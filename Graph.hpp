@@ -33,7 +33,14 @@ public:
     // Implementar!! 
     // Devuelve la cantidad de aristas
     int numEdges() const {
-        return 0;
+        int sum = 0;
+
+        for (int i = 0; i < numVertices; ++i) {
+            for (int j = 0; j < numVertices; ++j) {
+                sum += adjMatrix[i][j] == 1 ? 1 : 0;
+            }
+        }
+        return sum;
     }
 
     // Completa esta función
@@ -42,6 +49,12 @@ public:
         if (u < 0 || u >= numVertices)
             throw std::out_of_range("Vertice fuera de rango");
         else {
+            int numDegree = 0;
+            for (int i = 0; i < numVertices; ++i) {
+                numDegree += adjMatrix[u][i] == 1 ? 1 : 0;
+                numDegree += adjMatrix[i][u] == 1 ? 1 : 0;
+            }
+            return numDegree;
         }
     }
 
@@ -49,7 +62,21 @@ public:
     // Devuelve cierto si u es el nodo con mayor inDegree.
     // En caso de que haya varios nodos que tengan el mayor inDegree,
     // devuelve true si u es uno de ellos
-    bool isInfluencer(int u) const  {
+    bool isInfluencer(int u) const {
+        if (u < 0 || u >= numVertices)
+            throw std::out_of_range("Vertice fuera de rango");
+        else {
+            std::vector<int> degreeFreq;
+            for (int i = 0; i < numVertices; ++i) {
+                degreeFreq.push_back(inDegree(i));
+            }
+
+            for (int i = 0; i < degreeFreq.size(); i++) {
+                if (degreeFreq[i] > degreeFreq[u]) 
+                    return false;
+            }
+            return true;
+        }
     }
 };
 
